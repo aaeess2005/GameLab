@@ -18,7 +18,7 @@ android {
     }
     defaultConfig {
         applicationId "io.github.aaeess2005"
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
