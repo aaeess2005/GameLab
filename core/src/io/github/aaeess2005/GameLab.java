@@ -35,7 +35,7 @@ public class GameLab extends ApplicationAdapter {
 		batch.setProjectionMatrix(camera.combined);
 		ScreenUtils.clear(0, 1, 1, 1);
 		batch.begin();
-		batch.draw(img,0,0,this.width,this.height,0,1,1,0);
+		batch.draw(img,0,0,width,height,0,1,1,0);
 		batch.end();
 	}
 	
@@ -49,7 +49,6 @@ public class GameLab extends ApplicationAdapter {
 	public void resize(int width, int height) {
 		super.resize(width, height);
 		camera.setToOrtho(false,this.width,this.height);
-		Gdx.graphics.setWindowedMode(height*16/9,height);
 	}
 
 	@Override
