@@ -9,7 +9,7 @@ public class DesktopLauncher {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		//config.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
 		config.setWindowedMode(960,540);
-		config.setResizable(true);
+		config.setResizable(false);
 		config.setForegroundFPS(60);
 		config.setTitle("GameLab");
 		new Lwjgl3Application(new GameLab(), config);

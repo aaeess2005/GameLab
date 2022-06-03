@@ -6,49 +6,68 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.CpuSpriteBatch;
-import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.g3d.Material;
+import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.graphics.g3d.ModelBatch;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class GameLab extends ApplicationAdapter {
-	final int width=960,height=540;
 	SpriteBatch batch;
-	Texture img;
-	OrthographicCamera camera;
+	Texture img0,img1,img2;
+	PerspectiveCamera camera;
 	
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
-		camera=new OrthographicCamera();
+		img0 = new Texture("badlogic.jpg");
+		img1=new Texture("sample.png");
+		img2=new Texture("man.gif");
+		camera=new PerspectiveCamera();
 	}
 
 	@Override
 	public void render () {
-		camera.update();
-		batch.setProjectionMatrix(camera.combined);
-		ScreenUtils.clear(0, 1, 1, 1);
+		Gdx.gl.glViewport( 0 ,  0 , SharedConstants.WIDTH, SharedConstants.HEIGHT);
+		Gdx.gl.glClear( GL20.GL_DEPTH_BUFFER_BIT);
+
 		batch.begin();
-		batch.draw(img,0,0,width,height,0,1,1,0);
+		batch.draw(img2,Gdx.graphics.getFrameId()*2f-100,100,100,100);
 		batch.end();
+		if(Gdx.graphics.getFrameId()*2f-100>SharedConstants.WIDTH){
+			Gdx.app.exit();
+			Gdx.app.log("aaeess2005","Surprise!");
+		}
+		RandomXS128 rand=new RandomXS128();
+		if(
+				rand.nextBoolean() &&
+				rand.nextBoolean() &&
+				rand.nextBoolean() &&
+				rand.nextBoolean() &&
+				rand.nextBoolean() &&
+				rand.nextBoolean()){
+			ScreenUtils.clear(0,1,1,1);
+		}
 	}
 	
 	@Override
 	public void dispose () {
 		batch.dispose();
-		img.dispose();
+		img0.dispose();
+		img1.dispose();
+		img2.dispose();
 	}
 
 	@Override
 	public void resize(int width, int height) {
 		super.resize(width, height);
-		camera.setToOrtho(false,this.width,this.height);
+
 	}
 
 	@Override
