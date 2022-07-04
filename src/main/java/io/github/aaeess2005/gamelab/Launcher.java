@@ -1,11 +1,20 @@
 package io.github.aaeess2005.gamelab;
 
+import io.github.aaeess2005.gamelab.client.main.ClientMain;
+import io.github.aaeess2005.gamelab.server.main.ServerMain;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.InetAddress;
+import java.net.PortUnreachableException;
+import java.net.UnknownHostException;
 
 public class Launcher extends JFrame{
+    private static final Logger logger= LoggerFactory.getLogger(Launcher.class);
     private JPanel serverPanel,clientPanel;
     private JButton serverButton,clientButton;
     private JTextField serverIpField,clientIpField;
@@ -84,7 +93,18 @@ public class Launcher extends JFrame{
         serverButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("test 514");
+                try {
+                    InetAddress hostname=InetAddress.getByName(serverIpField.getText());
+                    int port = Integer.parseInt(serverPortField.getText());
+                    if(!(port<=65535 && port>=0)){
+                        logger.warn("");
+                    }
+                    new Thread(new ServerMain(hostname,3)).run();
+                } catch (UnknownHostException uhe) {
+                    logger.warn("Unknown host: "+uhe);
+                } catch (NumberFormatException nfe){
+                    logger.warn("Port field input error.");
+                }
             }
         });
     }
