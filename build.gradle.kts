@@ -3,12 +3,9 @@ plugins {
 }
 
 group = "io.github.aaeess2005"
-version = "0.0.1"
+version = "1.0.0-SNAPSHOT"
 
 repositories {
-    //mavenLocal { setUrl("file://${project.rootDir}/lib") }
-    // 本地仓库
-    mavenLocal()
     // 阿里云
     maven("https://maven.aliyun.com/repository/public")
     // Maven中央仓库
@@ -30,11 +27,18 @@ val lwjglNatives = Pair(
 }
 
 dependencies {
+    // JOPT Simple
+    implementation("net.sf.jopt-simple:jopt-simple:5.0.4")
+
+    // Slf4j
+    implementation("org.slf4j:slf4j-api:1.7.36")
+    implementation("org.slf4j:slf4j-simple:1.7.36")
+
     // Netty
     implementation("io.netty:netty-all:4.1.78.Final")
 
     // GSON
-    implementation("com.google.code.gson:gson:2.8.5")
+    implementation("com.google.code.gson:gson:2.9.0")
 
     // LWJGL
     implementation(platform("org.lwjgl:lwjgl-bom:$lwjglVersion"))
