@@ -17,8 +17,8 @@ public class Launcher extends JFrame{
     private static final Logger logger= LoggerFactory.getLogger(Launcher.class);
     private JPanel serverPanel,clientPanel;
     private JButton serverButton,clientButton;
-    private JTextField serverIpField,clientIpField;
-    private JTextField serverPortField,clientPortField;
+    private JTextField serverIpField;
+    private JTextField serverPortField;
     private JTextField clientGuiWidth;
     private JTextField clientGuiHeight;
 
@@ -50,9 +50,7 @@ public class Launcher extends JFrame{
         serverButton=new JButton("Start Server");
         clientButton=new JButton("Start Client");
         serverIpField=new JTextField("0.0.0.0");
-        clientIpField=new JTextField("");
         serverPortField=new JTextField("10514");
-        clientPortField=new JTextField("10514");
         clientGuiWidth=new JTextField("854");
         clientGuiHeight=new JTextField("480");
 
@@ -60,20 +58,16 @@ public class Launcher extends JFrame{
         clientPanel.setLayout(new FlowLayout());
 
         add(serverPanel);
-        add(new JSeparator());
+        add(new JLabel("GameLab",JLabel.CENTER));
         add(clientPanel);
         serverPanel.add(serverButton);
         clientPanel.add(clientButton);
 
         serverPanel.add(new JLabel("Host Name"));
         serverPanel.add(serverIpField);
-        clientPanel.add(new JLabel("Host Name"));
-        clientPanel.add(clientIpField);
 
         serverPanel.add(new JLabel("Port"));
         serverPanel.add(serverPortField);
-        clientPanel.add(new JLabel("Port"));
-        clientPanel.add(clientPortField);
 
         clientPanel.add(new JLabel("Width"));
         clientPanel.add(clientGuiWidth);
@@ -84,25 +78,29 @@ public class Launcher extends JFrame{
         serverButton.setPreferredSize(new Dimension (200,30));
         clientButton.setPreferredSize(new Dimension (200,30));
         serverIpField.setPreferredSize(new Dimension (200,30));
-        clientIpField.setPreferredSize(new Dimension (200,30));
         serverPortField.setPreferredSize(new Dimension (200,30));
-        clientPortField.setPreferredSize(new Dimension (200,30));
         clientGuiWidth.setPreferredSize(new Dimension (50,30));
         clientGuiHeight.setPreferredSize(new Dimension (50,30));
 
-        serverButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    InetAddress hostname=InetAddress.getByName(serverIpField.getText());
-                    int port = Integer.parseInt(serverPortField.getText());
-                    new Thread(new ServerMain(hostname,port));
-                    new Thread(new ServerMain(hostname,3)).run();
-                } catch (UnknownHostException uhe) {
-                    logger.warn("Unknown host: "+uhe);
-                } catch (NumberFormatException nfe){
-                    logger.warn("The entered port is Not a Number.");
-                }
+        serverButton.addActionListener(e -> {
+            try {
+                InetAddress hostname=InetAddress.getByName(serverIpField.getText());
+                int port = Integer.parseInt(serverPortField.getText());
+                new Thread(new ServerMain(hostname,port)).run();
+            } catch (UnknownHostException uhe) {
+                logger.warn("Unknown host: "+uhe);
+            } catch (NumberFormatException nfe){
+                logger.warn("The entered port is Not a Number.");
+            }
+        });
+
+        clientButton.addActionListener(e -> {
+            try {
+                int width=Integer.parseInt(clientGuiWidth.getText());
+                int height=Integer.parseInt(clientGuiHeight.getText());
+                new Thread(new ClientMain(width,height));
+            }  catch (NumberFormatException nfe){
+                logger.warn("The entered width or height is Not a Number.");
             }
         });
     }
