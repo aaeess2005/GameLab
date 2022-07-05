@@ -96,14 +96,12 @@ public class Launcher extends JFrame{
                 try {
                     InetAddress hostname=InetAddress.getByName(serverIpField.getText());
                     int port = Integer.parseInt(serverPortField.getText());
-                    if(!(port<=65535 && port>=0)){
-                        logger.warn("");
-                    }
+                    new Thread(new ServerMain(hostname,port));
                     new Thread(new ServerMain(hostname,3)).run();
                 } catch (UnknownHostException uhe) {
                     logger.warn("Unknown host: "+uhe);
                 } catch (NumberFormatException nfe){
-                    logger.warn("Port field input error.");
+                    logger.warn("The entered port is Not a Number.");
                 }
             }
         });
