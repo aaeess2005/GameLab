@@ -2,14 +2,16 @@ package io.github.aaeess2005.gamelab.server.main;
 
 import java.net.InetAddress;
 
-public class ServerMain implements Runnable{
+public class ServerMain implements Runnable {
     public boolean isRunning;
     private InetAddress hostname;
     private int port;
-    public ServerMain(InetAddress hostname, int port){
-        this.hostname=hostname;
-        this.port=port;
+
+    public ServerMain(InetAddress hostname, int port) {
+        this.hostname = hostname;
+        this.port = port;
     }
+
     @Override
     public void run() {
         //初始化服务端
@@ -25,14 +27,19 @@ public class ServerMain implements Runnable{
         //停止运行
         stop();
     }
-    public void initServer(){
+
+    public void initServer() {
     }
-    public void acceptClient(){
+
+    public void acceptClient() {
     }
-    public void tick(){
+
+    public void tick() {
     }
-    public void broadcastToClient(){
+
+    public void broadcastToClient() {
     }
-    public void stop(){
+
+    public void stop() {
     }
 }
