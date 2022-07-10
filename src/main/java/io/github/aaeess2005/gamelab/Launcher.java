@@ -83,6 +83,7 @@ public class Launcher extends JFrame {
                 InetAddress hostname = InetAddress.getByName(serverIpField.getText());
                 int port = Integer.parseInt(serverPortField.getText());
                 new Thread(new ServerMain(hostname, port)).start();
+                dispose();
             } catch (UnknownHostException uhe) {
                 logger.warn("Unknown host: " + uhe);
             } catch (NumberFormatException nfe) {
@@ -95,11 +96,11 @@ public class Launcher extends JFrame {
                 int width = Integer.parseInt(clientGuiWidth.getText());
                 int height = Integer.parseInt(clientGuiHeight.getText());
                 new Thread(new ClientMain(width, height)).start();
+                dispose();
             } catch (NumberFormatException nfe) {
                 logger.warn("The entered width or height is Not a Number.");
             }
         });
     }
-
 
 }
