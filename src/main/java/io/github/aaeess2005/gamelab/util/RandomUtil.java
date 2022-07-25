@@ -5,27 +5,32 @@ import java.util.Random;
 public class RandomUtil {
     private static Random instance;
 
-    public synchronized static float nextFloat(long seed){
+    public static float nextFloat(long seed) {
         instance.setSeed(seed);
         return instance.nextFloat();
     }
-    public synchronized static double nextDouble(long seed){
+
+    public static double nextDouble(long seed) {
         instance.setSeed(seed);
         return instance.nextDouble();
     }
-    public synchronized static int nextInt(long seed){
+
+    public static int nextInt(long seed) {
         instance.setSeed(seed);
         return instance.nextInt();
     }
-    public synchronized static int nextInt(long seed,int bound){
+
+    public static int nextInt(long seed, int bound) {
         instance.setSeed(seed);
         return instance.nextInt(bound);
     }
-    public synchronized static boolean nextBoolean(long seed){
+
+    public static boolean nextBoolean(long seed) {
         instance.setSeed(seed);
         return instance.nextBoolean();
     }
-    public synchronized static long nextLong(long seed){
+
+    public static long nextLong(long seed) {
         instance.setSeed(seed);
         return instance.nextLong();
     }

@@ -1,24 +1,27 @@
 package io.github.aaeess2005.gamelab.client.main;
 
 import io.github.aaeess2005.gamelab.SharedConstants;
-import org.lwjgl.*;
-import org.lwjgl.glfw.*;
-import org.lwjgl.opengl.*;
-import org.lwjgl.system.*;
+import io.github.aaeess2005.gamelab.util.DeltaUtil;
+import org.lwjgl.Version;
+import org.lwjgl.glfw.GLFWErrorCallback;
+import org.lwjgl.glfw.GLFWKeyCallback;
+import org.lwjgl.glfw.GLFWKeyCallbackI;
+import org.lwjgl.glfw.GLFWVidMode;
+import org.lwjgl.opengl.GL;
+import org.lwjgl.system.MemoryStack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.nio.*;
+import java.nio.IntBuffer;
 
-import static org.lwjgl.glfw.Callbacks.*;
+import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL33.*;
-import static org.lwjgl.system.MemoryStack.*;
-import static org.lwjgl.system.MemoryUtil.*;
+import static org.lwjgl.system.MemoryStack.stackPush;
+import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class ClientMain implements Runnable {
-    private static final Logger logger = LoggerFactory.getLogger(ClientMain.class);
-    public boolean isRunning;
+    private static final Logger logger = LoggerFactory.getLogger("Client");
     private long window;
     private int width, height;
 
@@ -35,6 +38,7 @@ public class ClientMain implements Runnable {
             input();
             render();
             glfwPollEvents();
+            DeltaUtil.resetDelta();
         }
         stop();
     }
@@ -85,8 +89,12 @@ public class ClientMain implements Runnable {
 
     public void inputCallback() {
         glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
-            if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
-                glfwSetWindowShouldClose(window, true); // We will detect this in the rendering loop
+            if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE) {
+                glfwSetWindowShouldClose(window, true);
+            }
+            if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE) {
+                glfwSetWindowShouldClose(window, true);
+            }
         });
     }
 
@@ -95,6 +103,7 @@ public class ClientMain implements Runnable {
 
     public void render() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
         glfwSwapBuffers(window);
     }
 

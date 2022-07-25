@@ -10,23 +10,28 @@ import java.util.UUID;
  */
 public abstract class Entity {
     private UUID uuid;
-    private Vector3f position,rotation;
+    private Vector3f position, rotation;
 
     public UUID getUuid() {
         return uuid;
     }
+
     public void setUuid(UUID uuid) {
         this.uuid = uuid;
     }
+
     public Vector3f getPosition() {
         return position;
     }
+
     public void setPosition(Vector3f position) {
         this.position = position;
     }
+
     public Vector3f getRotation() {
         return rotation;
     }
+
     public void setRotation(Vector3f rotation) {
         this.rotation = rotation;
     }

@@ -12,9 +12,9 @@ public class Client {
     private boolean isClosed;
 
     public Client(Socket socket) throws IOException {
-        this.socket=socket;
-        inputStream=socket.getInputStream();
-        outputStream=socket.getOutputStream();
+        this.socket = socket;
+        inputStream = socket.getInputStream();
+        outputStream = socket.getOutputStream();
     }
 
     public void transport(DataPacket dataPacket) throws IOException {

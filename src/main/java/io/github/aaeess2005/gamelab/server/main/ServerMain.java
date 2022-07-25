@@ -8,19 +8,18 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
-import java.net.SocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ServerMain implements Runnable {
     public boolean isRunning;
     private ServerSocket serverSocket;
-    private List<Client> clients=new ArrayList<>();
+    private List<Client> clients = new ArrayList<>();
 
     public ServerMain(InetAddress hostname, int port) {
         try {
-            serverSocket=new ServerSocket();
-            serverSocket.bind(new InetSocketAddress(hostname,port));
+            serverSocket = new ServerSocket();
+            serverSocket.bind(new InetSocketAddress(hostname, port));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -49,10 +48,10 @@ public class ServerMain implements Runnable {
     }
 
     public void acceptClient() {
-        Thread thread=new Thread(() -> {
+        Thread thread = new Thread(() -> {
             while (true) {
                 try {
-                    Client client=new Client(serverSocket.accept());
+                    Client client = new Client(serverSocket.accept());
                     clients.add(client);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
@@ -69,11 +68,11 @@ public class ServerMain implements Runnable {
     public void broadcastToClient() {
     }
 
-    public void maintainTPS(float TPS){
-        float d=1f/TPS;
-        if(DeltaUtil.getDelta()<d){
+    public void maintainTPS(float TPS) {
+        float d = 1f / TPS;
+        if (DeltaUtil.getDelta() < d) {
             try {
-                Thread.sleep((long) (d*1_000f-DeltaUtil.getDelta()*1_000f));
+                Thread.sleep((long) (d * 1_000f - DeltaUtil.getDelta() * 1_000f));
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

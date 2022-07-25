@@ -1,20 +1,29 @@
 package io.github.aaeess2005.gamelab;
 
+import io.github.aaeess2005.gamelab.server.main.ServerMain;
+import joptsimple.OptionParser;
+import joptsimple.OptionSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Main {
-    private final static Logger logger = LoggerFactory.getLogger(Main.class);
+    private final static Logger logger = LoggerFactory.getLogger("Main");
+
     public static void main(String[] args) {
-        //判断是否启用无图形界面的服务端
-        if (args.length!=0) {
-            //TODO JOPT
-            if (args[0].equals("noguiserver")) {
-                logger.info("NoGUI server enable.");
-            }
-        }
+        OptionParser optionParser = new OptionParser();
+        optionParser.allowsUnrecognizedOptions();
+        optionParser.accepts("noguiserver");
+        OptionSet optionSet = optionParser.parse(args);
 
         //启动GameLab启动器
-        new Launcher();
+        if(!optionSet.hasOptions()){
+            new Launcher();
+        }
+
+        //判断是否启用无图形界面的服务端
+        if (optionSet.has("noguiserver")) {
+            logger.info("NoGUI server enable.");
+            //TODO Server
+        }
     }
 }
