@@ -1,6 +1,5 @@
 package io.github.aaeess2005.gamelab;
 
-import io.github.aaeess2005.gamelab.server.main.ServerMain;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import org.slf4j.Logger;
@@ -16,7 +15,7 @@ public class Main {
         OptionSet optionSet = optionParser.parse(args);
 
         //启动GameLab启动器
-        if(!optionSet.hasOptions()){
+        if (!optionSet.hasOptions()) {
             new Launcher();
         }
 

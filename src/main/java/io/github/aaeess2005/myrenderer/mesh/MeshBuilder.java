@@ -13,16 +13,19 @@ import java.util.List;
 import static org.lwjgl.opengl.GL33.*;
 
 public class MeshBuilder {
-    private List<Vertex> list=new ArrayList<>();
-    public void vertex(float x,float y,float z,float r,float g,float b,float a,float s,float t){
-        list.add(new Vertex(x,y,z,r,g,b,a,s,t));
+    private List<Vertex> list = new ArrayList<>();
+
+    public void vertex(float x, float y, float z, float r, float g, float b, float a, float s, float t) {
+        list.add(new Vertex(x, y, z, r, g, b, a, s, t));
     }
-    public void vertex(Vector3f position, Vector4f color, Vector2f uv){
-        list.add(new Vertex(position,color,uv));
+
+    public void vertex(Vector3f position, Vector4f color, Vector2f uv) {
+        list.add(new Vertex(position, color, uv));
     }
-    public Mesh build(){
-        FloatBuffer vertexBuffer=MemoryUtil.memAllocFloat((3+4+2)*list.size());
-        for(Vertex vex : list){
+
+    public Mesh build() {
+        FloatBuffer vertexBuffer = MemoryUtil.memAllocFloat((3 + 4 + 2) * list.size());
+        for (Vertex vex : list) {
             vertexBuffer.put(vex.position.x);
             vertexBuffer.put(vex.position.y);
             vertexBuffer.put(vex.position.z);
@@ -33,21 +36,21 @@ public class MeshBuilder {
             vertexBuffer.put(vex.uv.x);
             vertexBuffer.put(vex.uv.y);
         }
+        vertexBuffer.flip();
 
-
-        int vao=glGenVertexArrays(),vbo=glGenBuffers();
+        int vao = glGenVertexArrays(), vbo = glGenBuffers();
         glBindVertexArray(vao);
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
         glBufferData(GL_ARRAY_BUFFER, vertexBuffer, GL_STATIC_DRAW);
 
-        glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, false, 9 * 4, 0);
         glEnableVertexAttribArray(0);
-        glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, 3*4);
+        glVertexAttribPointer(1, 4, GL_FLOAT, false, 9 * 4, 3 * 4);
         glEnableVertexAttribArray(1);
-        glVertexAttribPointer(2, 2, GL_FLOAT, false, 0, 7*4);
+        glVertexAttribPointer(2, 2, GL_FLOAT, false, 9 * 4, 7 * 4);
         glEnableVertexAttribArray(2);
 
         glBindVertexArray(0);
-        return new Mesh(vao,vbo,list.size());
+        return new Mesh(vao, vbo, list.size());
     }
 }

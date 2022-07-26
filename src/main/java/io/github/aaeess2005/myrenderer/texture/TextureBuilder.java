@@ -1,27 +1,26 @@
 package io.github.aaeess2005.myrenderer.texture;
 
 import org.lwjgl.system.MemoryStack;
-import org.lwjgl.system.MemoryUtil;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
 import static org.lwjgl.opengl.GL33.*;
-import static org.lwjgl.stb.STBImage.*;
+import static org.lwjgl.stb.STBImage.stbi_load_from_memory;
 
 public class TextureBuilder {
-    public Texture build(ByteBuffer imgData, int textureWrapS,int textureWrapT,int textureMinFilter, int textureMagFilter){
-        int width,height;
+    public Texture build(ByteBuffer imgData, int textureWrapS, int textureWrapT, int textureMinFilter, int textureMagFilter) {
+        int width, height;
         ByteBuffer data;
-        try(MemoryStack stack=MemoryStack.stackPush()) {
+        try (MemoryStack stack = MemoryStack.stackPush()) {
             IntBuffer pWidth = stack.mallocInt(1);
             IntBuffer pHeight = stack.mallocInt(1);
             IntBuffer pChannel = stack.mallocInt(1);
-            data=stbi_load_from_memory(imgData,pWidth,pHeight,pChannel,0);
-            width=pWidth.get(0);
-            height=pHeight.get(0);
+            data = stbi_load_from_memory(imgData, pWidth, pHeight, pChannel, 0);
+            width = pWidth.get(0);
+            height = pHeight.get(0);
         }
-        int id=glGenTextures();
+        int id = glGenTextures();
         glBindTexture(GL_TEXTURE_2D, id);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, textureWrapS);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, textureWrapT);
@@ -29,5 +28,7 @@ public class TextureBuilder {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, textureMagFilter);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
+
+        return new Texture(id);
     }
 }

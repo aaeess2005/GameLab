@@ -2,17 +2,20 @@ package io.github.aaeess2005.gamelab.client.main;
 
 import io.github.aaeess2005.gamelab.SharedConstants;
 import io.github.aaeess2005.gamelab.util.DeltaUtil;
+import io.github.aaeess2005.gamelab.util.ResourceUtil;
 import io.github.aaeess2005.myrenderer.mesh.MeshBuilder;
+import io.github.aaeess2005.myrenderer.shader.FragmentShader;
+import io.github.aaeess2005.myrenderer.shader.Program;
+import io.github.aaeess2005.myrenderer.shader.VertexShader;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
-import org.lwjgl.glfw.GLFWKeyCallback;
-import org.lwjgl.glfw.GLFWKeyCallbackI;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.nio.IntBuffer;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
@@ -72,6 +75,22 @@ public class ClientMain implements Runnable {
     public void render() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
+        ////////For Testing
+        try {
+            new Program(new VertexShader[]{new VertexShader(new String(ResourceUtil.getResourceAsBytes("gamelab/render/shader/begin.vsh")))},
+                    new FragmentShader[]{new FragmentShader(new String(ResourceUtil.getResourceAsBytes("gamelab/render/shader/begin.fsh")))}
+            ).use();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        MeshBuilder mesh = new MeshBuilder();
+        mesh.vertex(0, 0.5f, 0.5f, 1, 0, 0, 1, 0, 0);
+        mesh.vertex(-0.4f, -0.5f, 0.5f, 0, 1, 0, 1, 0, 0);
+        mesh.vertex(0.4f, -0.5f, 0.5f, 0, 0, 1, 1, 0, 0);
+        mesh.build().render();
+        ////////
+        
         glfwSwapBuffers(window);
     }
 
@@ -82,14 +101,15 @@ public class ClientMain implements Runnable {
         glfwSetErrorCallback(null).free();
     }
 
-    private void setErrorCallback(){
+    private void setErrorCallback() {
         GLFWErrorCallback.createPrint(System.err).set();
         if (!glfwInit()) {
             logger.error("Unable to initialize GLFW");
             throw new IllegalStateException("Unable to initialize GLFW");
         }
     }
-    private void createWindow(){
+
+    private void createWindow() {
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -103,7 +123,8 @@ public class ClientMain implements Runnable {
             throw new RuntimeException("Failed to create the GLFW window");
         }
     }
-    private void centerWindow(){
+
+    private void centerWindow() {
         try (MemoryStack stack = stackPush()) {
             IntBuffer pWidth = stack.mallocInt(1);
             IntBuffer pHeight = stack.mallocInt(1);
@@ -113,11 +134,13 @@ public class ClientMain implements Runnable {
             glfwSetWindowPos(window, (vidmode.width() - pWidth.get(0)) / 2, (vidmode.height() - pHeight.get(0)) / 2);
         }
     }
-    private void makeGLContext(){
+
+    private void makeGLContext() {
         glfwMakeContextCurrent(window);
         GL.createCapabilities();
     }
-    private void glInit(){
+
+    private void glInit() {
         glClearColor(0, 1, 1, 1);
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_STENCIL_TEST);
