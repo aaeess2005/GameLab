@@ -2,6 +2,7 @@ package io.github.aaeess2005.gamelab.client.main;
 
 import io.github.aaeess2005.gamelab.SharedConstants;
 import io.github.aaeess2005.gamelab.util.DeltaUtil;
+import io.github.aaeess2005.myrenderer.mesh.MeshBuilder;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
@@ -46,45 +47,12 @@ public class ClientMain implements Runnable {
     public void initClient() {
         logger.info("LWJGL Version" + Version.getVersion());
 
-        GLFWErrorCallback.createPrint(System.err).set();
-        if (!glfwInit()) {
-            logger.error("Unable to initialize GLFW");
-            throw new IllegalStateException("Unable to initialize GLFW");
-        }
-
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-        glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
-        glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
-
-        String title = "GameLab  " + SharedConstants.versionName;
-        window = glfwCreateWindow(width, height, title, NULL, NULL);
-        if (window == NULL) {
-            logger.error("Failed to create the GLFW window");
-            throw new RuntimeException("Failed to create the GLFW window");
-        }
-
-        try (MemoryStack stack = stackPush()) {
-            IntBuffer pWidth = stack.mallocInt(1);
-            IntBuffer pHeight = stack.mallocInt(1);
-
-            // Get the window size passed to glfwCreateWindow
-            glfwGetWindowSize(window, pWidth, pHeight);
-            // Get the resolution of the primary monitor
-            GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-            // Center the window
-            glfwSetWindowPos(window, (vidmode.width() - pWidth.get(0)) / 2, (vidmode.height() - pHeight.get(0)) / 2);
-        } // the stack frame is popped automatically
-        // Make the OpenGL context current
-        glfwMakeContextCurrent(window);
-        GL.createCapabilities();
-        // Make the window visible
+        setErrorCallback();
+        createWindow();
+        centerWindow();
+        makeGLContext();
         glfwShowWindow(window);
-
-
-        glClearColor(0, 1, 1, 1);
-        glEnable(GL_DEPTH_TEST);
+        glInit();
     }
 
     public void inputCallback() {
@@ -102,7 +70,7 @@ public class ClientMain implements Runnable {
     }
 
     public void render() {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
         glfwSwapBuffers(window);
     }
@@ -112,5 +80,49 @@ public class ClientMain implements Runnable {
         glfwDestroyWindow(window);
         glfwTerminate();
         glfwSetErrorCallback(null).free();
+    }
+
+    private void setErrorCallback(){
+        GLFWErrorCallback.createPrint(System.err).set();
+        if (!glfwInit()) {
+            logger.error("Unable to initialize GLFW");
+            throw new IllegalStateException("Unable to initialize GLFW");
+        }
+    }
+    private void createWindow(){
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+        glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+
+        String title = "GameLab  " + SharedConstants.versionName;
+        window = glfwCreateWindow(width, height, title, NULL, NULL);
+        if (window == NULL) {
+            logger.error("Failed to create the GLFW window");
+            throw new RuntimeException("Failed to create the GLFW window");
+        }
+    }
+    private void centerWindow(){
+        try (MemoryStack stack = stackPush()) {
+            IntBuffer pWidth = stack.mallocInt(1);
+            IntBuffer pHeight = stack.mallocInt(1);
+
+            glfwGetWindowSize(window, pWidth, pHeight);
+            GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+            glfwSetWindowPos(window, (vidmode.width() - pWidth.get(0)) / 2, (vidmode.height() - pHeight.get(0)) / 2);
+        }
+    }
+    private void makeGLContext(){
+        glfwMakeContextCurrent(window);
+        GL.createCapabilities();
+    }
+    private void glInit(){
+        glClearColor(0, 1, 1, 1);
+        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_STENCIL_TEST);
+        glEnable(GL_CULL_FACE);
+        glCullFace(GL_BACK);
+        glFrontFace(GL_CCW);
     }
 }

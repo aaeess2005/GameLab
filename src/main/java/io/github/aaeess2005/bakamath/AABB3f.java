@@ -6,13 +6,12 @@ public class AABB3f {
     public Vector3f boxMin;
     public Vector3f boxMax;
 
-    private AABB3f(Vector3f boxMin, Vector3f boxMax) {
+    public AABB3f(Vector3f boxMin, Vector3f boxMax) {
+        this.boxMin=boxMin;
+        this.boxMax=boxMax;
     }
-
-    private AABB3f() {
-    }
-
-    public static AABB3f getAABB(Vector3f boxMin, Vector3f boxMax) {
-        return new AABB3f(boxMin, boxMax);
+    public AABB3f() {
+        boxMin=new Vector3f(0,0,0);
+        boxMax=new Vector3f(0,0,0);
     }
 }
