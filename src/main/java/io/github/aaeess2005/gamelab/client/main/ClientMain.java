@@ -75,33 +75,9 @@ public class ClientMain implements Runnable {
 
     public void input() {
     }
-    Texture t;
+
     public void render() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-
-        ////////For Testing
-        try {
-            new Program(new VertexShader[]{new VertexShader(new String(ResourceUtil.getResourceAsBytes("gamelab/render/shader/begin.vsh")))},
-                    new FragmentShader[]{new FragmentShader(new String(ResourceUtil.getResourceAsBytes("gamelab/render/shader/begin.fsh")))}
-            ).use();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        try {
-            t = new TextureBuilder().build(ResourceUtil.getResourceAsByteBuffer("gamelab/render/texture/noise.png"),GL_MIRRORED_REPEAT,GL_MIRRORED_REPEAT,GL_NEAREST,GL_NEAREST);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        MeshBuilder mesh = new MeshBuilder();
-        mesh.vertex(0, 0.5f, 0.5f, 1, 0, 0, 1, 0, 0);
-        mesh.vertex(-0.4f, -0.5f, 0.5f, 0, 1, 0, 1, 1, 0);
-        mesh.vertex(0.4f, -0.5f, 0.5f, 0, 0, 1, 1, 1, 1);
-        Mesh m=mesh.build();
-        m.bindTexture(t);
-        m.render();
-        ////////
 
         glfwSwapBuffers(window);
     }

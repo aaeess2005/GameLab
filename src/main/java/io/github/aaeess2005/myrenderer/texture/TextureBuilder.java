@@ -6,8 +6,7 @@ import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
 import static org.lwjgl.opengl.GL33.*;
-import static org.lwjgl.stb.STBImage.stbi_image_free;
-import static org.lwjgl.stb.STBImage.stbi_load_from_memory;
+import static org.lwjgl.stb.STBImage.*;
 
 public class TextureBuilder {
     public Texture build(ByteBuffer imgFileData, int textureWrapS, int textureWrapT, int textureMinFilter, int textureMagFilter) {
@@ -17,6 +16,7 @@ public class TextureBuilder {
             IntBuffer pWidth = stack.mallocInt(1);
             IntBuffer pHeight = stack.mallocInt(1);
             IntBuffer pChannel = stack.mallocInt(1);
+            stbi_set_flip_vertically_on_load(true);
             data = stbi_load_from_memory(imgFileData, pWidth, pHeight, pChannel, 0);
             width = pWidth.get(0);
             height = pHeight.get(0);

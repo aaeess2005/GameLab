@@ -1,3 +1,12 @@
+tasks {
+    javadoc {
+        options.encoding = "UTF-8"
+    }
+    compileJava {
+        options.encoding = "UTF-8"
+    }
+}
+
 plugins {
     id("java")
 }
@@ -40,6 +49,9 @@ dependencies {
     // GSON
     implementation("com.google.code.gson:gson:2.9.0")
 
+    //JOML
+    implementation("org.joml", "joml", jomlVersion)
+
     // LWJGL
     implementation(platform("org.lwjgl:lwjgl-bom:$lwjglVersion"))
     implementation("org.lwjgl", "lwjgl")
@@ -68,6 +80,5 @@ dependencies {
     runtimeOnly("org.lwjgl", "lwjgl-shaderc", classifier = lwjglNatives)
     runtimeOnly("org.lwjgl", "lwjgl-stb", classifier = lwjglNatives)
     runtimeOnly("org.lwjgl", "lwjgl-xxhash", classifier = lwjglNatives)
-    implementation("org.joml", "joml", jomlVersion)
 }
 
