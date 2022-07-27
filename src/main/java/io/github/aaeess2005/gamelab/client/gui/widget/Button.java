@@ -1,13 +1,9 @@
 package io.github.aaeess2005.gamelab.client.gui.widget;
 
-public class Button extends Widget {
+public abstract class Button extends Widget {
     @Override
-    public void onPress() {
-
-    }
+    public abstract void onPress();
 
     @Override
-    public void onToolTip() {
-
-    }
+    public abstract void onToolTip();
 }

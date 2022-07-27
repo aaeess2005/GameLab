@@ -1,5 +1,7 @@
 package io.github.aaeess2005.gamelab.util;
 
+import org.lwjgl.system.MemoryUtil;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -23,7 +25,7 @@ public class ResourceUtil {
 
     public static ByteBuffer getResourceAsByteBuffer(String path) throws IOException {
         InputStream is = getResourceAsStream(path);
-        ByteBuffer bb = ByteBuffer.allocate(is.available());
+        ByteBuffer bb = MemoryUtil.memAlloc(is.available());
         bb.put(is.readAllBytes());
         is.close();
         return bb.flip();
